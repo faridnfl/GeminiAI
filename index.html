@@ -93,12 +93,12 @@
       const userInput = document.getElementById("user-input");
       const form = document.getElementById("chat-form");
 
-      // Fungsi untuk membersihkan format markdown dari bot
+
       function formatMessage(text) {
         return text
-          .replace(/\n/g, "<br>") // Ganti newline dengan <br>
-          .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>") // **bold** → <b>bold</b>
-          .replace(/\*(.*?)\*/g, "<i>$1</i>"); // *italic* → <i>italic</i>
+          .replace(/\n/g, "<br>") 
+          .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+          .replace(/\*(.*?)\*/g, "<i>$1</i>");
       }
 
       document.addEventListener("DOMContentLoaded", () => {
