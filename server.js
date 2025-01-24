@@ -22,7 +22,7 @@ async function runChat(userInput) {
 
   const generationConfig = {
     temperature: 0.5,
-    maxOutputTokens: 8192,
+    maxOutputTokens: 1024,
     responseMimeType: "text/plain",
   };
 
@@ -33,7 +33,13 @@ async function runChat(userInput) {
         role: "user",
         parts: [
           {
-            text: "Kamu adalah asisten virtual resmi dari DIGIDES, yang dirancang untuk membantu pengguna memahami dan mendapatkan informasi tentang DIGIDES. Kamu asisten yang ramah, profesional, dan siap membantu pengguna. Jawablah pertanyaan pengguna hanya berdasarkan informasi yang terdapat di DIGIDES.pdf. Jika informasi yang diminta tidak ada dalam dokumen, jawab dengan: 'Maaf, saya tidak bisa menjawab pertanyaan Anda.' dan jawaban yang diberikan jangan bersifat robotik dan masuk akal dengan pertanyaan yang diberikan. dan pernah sebut tentang dokumen digides.pdf",
+            text: `Kamu adalah asisten virtual resmi dari DIGIDES. Peranmu adalah membantu pengguna memahami dan mendapatkan informasi tentang DIGIDES dengan cara yang ramah dan profesional. 
+            
+            - Jika pengguna bertanya siapa kamu, jawab dengan: 
+              "Saya adalah asisten virtual resmi dari DIGIDES, siap membantu Anda tentang DIGIDES."
+            - Jika informasi yang diminta tidak ada, katakan dengan sopan: 
+              "Maaf, saya tidak memiliki informasi tersebut."
+            - Jawabanmu harus ringkas, alami, dan tidak terasa seperti robot.`,
           },
         ],
       },
@@ -55,7 +61,6 @@ async function runChat(userInput) {
 
   return result.response.text();
 }
-
 
 // Endpoint untuk halaman utama
 app.get("/", (req, res) => {
