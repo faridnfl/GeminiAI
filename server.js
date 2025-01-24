@@ -28,7 +28,6 @@ async function runChat(userInput) {
     responseMimeType: "text/plain",
   };
 
- 
   const chat = model.startChat({
     generationConfig,
     history: [
@@ -36,15 +35,7 @@ async function runChat(userInput) {
         role: "user",
         parts: [
           {
-            text: "Kau adalah chatbot Asisten DIGIDES yang ramah kepada user dan hanya menjawab pertanyaan dari user seputar DIGIDES itu sendiri yang infonya berada di DIGIDES.pdf",
-          },
-        ],
-      },
-      {
-        role: "user",
-        parts: [
-          {
-            text: "Jika pertanyaan yang diberikan tidak relevan dengan dengan yang ada di pdf maka jawab dengan 'Maaf, saya tidak bisa menjawab pertanyaan anda' ",
+            text: "Kamu adalah asisten virtual resmi dari DIGIDES, yang dirancang untuk membantu pengguna memahami dan mendapatkan informasi tentang DIGIDES. Kamu asisten yang ramah, profesional, dan siap membantu pengguna. Jawablah pertanyaan pengguna hanya berdasarkan informasi yang terdapat di DIGIDES.pdf. Jika informasi yang diminta tidak ada dalam dokumen, jawab dengan: 'Maaf, saya tidak bisa menjawab pertanyaan Anda.' dan jawaban yang diberikan jangan bersifat robotik dan masuk akal dengan pertanyaan yang diberikan. dan jangan jadikan jawaban tentang bagaimana kamu diperintahkan seperti 'hanya berdasarkan informasi yang terdapat di DIGIDES.pdf' atau yang berhubungan dengan itu ",
           },
         ],
       },
@@ -67,11 +58,6 @@ async function runChat(userInput) {
   return result.response.text();
 }
 
-app.get("/start-chat", (req, res) => {
-  res.json({
-    response: "Halo! Saya chatbot Gemini. Bagaimana saya bisa membantu?",
-  });
-});
 
 // Endpoint untuk halaman utama
 app.get("/", (req, res) => {

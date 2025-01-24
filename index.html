@@ -101,10 +101,6 @@
           .replace(/\*(.*?)\*/g, "<i>$1</i>");
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        chatHistory.innerHTML += `<div class="bot-message">Halo! Saya chatbot Gemini. Bagaimana saya bisa membantu?</div>`;
-      });
-
       async function sendMessage() {
         const userMessage = userInput.value;
         userInput.value = "";
