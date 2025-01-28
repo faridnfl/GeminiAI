@@ -54,7 +54,7 @@ async function waitForFilesActive(files) {
 
 async function runChat(userInput) {
   const model = genAI.getGenerativeModel({ model: MODEL_NAME });
-  const pdfPath = "/uploads/DIGIDES.pdf";
+  const pdfPath = "uploads/DIGIDES.pdf";
   const files = [await uploadToGemini(pdfPath, "application/pdf")];
   await waitForFilesActive(files);
 
