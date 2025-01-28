@@ -54,7 +54,7 @@ async function waitForFilesActive(files) {
 
 async function runChat(userInput) {
   const model = genAI.getGenerativeModel({ model: MODEL_NAME });
-  const pdfPath = "uploads/DIGIDES.pdf";
+  const pdfPath = path.join(__dirname, 'uploads', 'DIGIDES.pdf');
   const files = [await uploadToGemini(pdfPath, "application/pdf")];
   await waitForFilesActive(files);
 
@@ -236,11 +236,21 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-app.post("/upload", upload.single("pdf"), (req, res) => {
+app.post('/upload', upload.single('pdf'), (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ error: "No file uploaded" });
+    return res.status(400).json({ message: 'No file uploaded' });
   }
-  res.json({ message: "File uploaded successfully", file: req.file });
+
+  const tempPath = req.file.path;
+  const targetPath = path.join(__dirname, 'uploads', 'DIGIDES.pdf');
+
+  fs.rename(tempPath, targetPath, (err) => {
+    if (err) {
+      return res.status(500).json({ message: 'Failed to save file' });
+    }
+
+    res.json({ message: 'File uploaded successfully' });
+  });
 });
 
 app.listen(port, () => {
