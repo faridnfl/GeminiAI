@@ -212,7 +212,7 @@
         const userMessage = userInput.value;
         userInput.value = "";
         try {
-          const response = await fetch("https://gemini-ai-puce.vercel.app/chat", {
+          const response = await fetch("https://gemini-ai-faridnfls-projects.vercel.app/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userInput: userMessage }),
@@ -263,7 +263,7 @@
         formData.append("pdf", file);
 
         try {
-          const response = await fetch("https://gemini-ai-puce.vercel.app/upload", {
+          const response = await fetch("https://gemini-ai-faridnfls-projects.vercel.app/upload", {
             method: "POST",
             body: formData,
           });
