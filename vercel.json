@@ -8,8 +8,8 @@
     ],
     "routes": [
       {
-        "src": "/images/(.*)",
-        "dest": "/public/images/$1"
+        "src": "/public/(.*)",
+        "dest": "/$1"
       },
       {
         "src": "/(.*)",
