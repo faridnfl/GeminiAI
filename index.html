@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asisten Desa</title>
     <style>
       body {
@@ -10,6 +11,7 @@
         align-items: center;
         min-height: 100vh;
         background-color: rgb(233, 233, 233);
+        overflow-x: hidden;
       }
 
       #chat-container {
@@ -155,6 +157,67 @@
 
       #upload-label:hover {
         color: #ddd;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 600px) {
+
+        body {
+            margin: 10px;
+            margin-right: 15px;
+        }
+
+        #chat-container {
+          width: 90%;
+         
+        }
+
+        #chat-head {
+          height: 100px;
+          width: 111%;
+        }
+
+        #upload-label img {
+          margin-top: 30px;
+        }
+
+        #chat-profile {
+          width: 50px;
+          height: 50px;
+        }
+
+        #head-right h3 {
+          font-size: 18px;
+        }
+
+        #head-right p {
+          font-size: 14px;
+        }
+
+        #chat-history {
+          height: 300px;
+        }
+
+        .user-message,
+        .bot-message {
+          max-width: 80%;
+          font-size: 14px;
+        }
+
+        input {
+          padding: 8px;
+          font-size: 14px;
+        }
+
+        button {
+          padding: 8px 12px;
+          font-size: 14px;
+        }
+
+        .message-container img {
+          width: 30px;
+          height: 30px;
+        }
       }
     </style>
   </head>
