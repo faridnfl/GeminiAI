@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Chatbot</title>
+    <title>Asisten Desa</title>
     <style>
       body {
         font-family: sans-serif;
@@ -9,42 +9,107 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        background-color: #f0f0f0;
+        background-color: rgb(233, 233, 233);
       }
 
       #chat-container {
-        background-color: #fff;
+        background-color: #ffffff;
         border-radius: 10px;
         padding: 20px;
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         width: 400px;
       }
 
-      h1 {
-        text-align: center;
-        margin-bottom: 20px;
+      #chat-head {
+        background-color: #4caf50;
+        width: 110%;
+        height: 130px;
+        margin-left: -20px;
+        margin-top: -20px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      #chat-profile {
+        margin-left: 20px;
+        background-color: white;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: contain;
+      }
+
+      #head-right {
+        margin-left: 10px;
+        color: white;
+        padding-bottom: 20px;
+      }
+
+      #head-right p {
+        margin: 0px;
+        font-size: 18px;
+        color: rgb(238, 238, 238);
+        padding-top: 1px;
+      }
+
+      #head-right h3 {
+        margin: 0px;
+        padding-top: 10px;
       }
 
       #chat-history {
-        height: 300px;
+        height: 400px;
         overflow-y: scroll;
-        margin-bottom: 10pxs;
+        margin-bottom: 10px;
+      }
+
+      #chat-history::-webkit-scrollbar {
+        display: none;
+      }
+
+      .message-container {
+        display: flex;
+        margin-bottom: 5px;
+      }
+
+      .user-message,
+      .bot-message {
+        padding: 10px;
+        border-radius: 10px;
+        max-width: 70%;
+        word-wrap: break-word;
+        position: relative;
       }
 
       .user-message {
-        text-align: right;
-        padding: 10px;
-        background-color: #f0f0f0;
-        border-radius: 10px;
-        margin-bottom: 5px;
+        background-color: #e0f0e0;
       }
 
       .bot-message {
-        text-align: left;
-        padding: 10px;
         background-color: #e0f0e0;
-        border-radius: 10px;
-        margin-bottom: 5px;
+      }
+
+      .user-message-container {
+        justify-content: flex-end;
+      }
+
+      .bot-message-container {
+        justify-content: flex-start;
+      }
+
+      .message-container img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .message-container img:last-child {
+        margin-right: 0;
+        margin-left: 10px;
       }
 
       form {
@@ -67,6 +132,7 @@
         border-radius: 5px;
         cursor: pointer;
       }
+
       #loader {
         display: none;
         position: absolute;
@@ -74,15 +140,52 @@
         left: 50%;
         transform: translate(-50%, -50%);
       }
+
+      #upload-form {
+        margin-left: auto;
+        margin-right: 10px;
+        margin-top: -70px;
+      }
+
+      #upload-label {
+        cursor: pointer;
+        font-size: 24px;
+        color: white;
+      }
+
+      #upload-label:hover {
+        color: #ddd;
+      }
     </style>
   </head>
   <body>
     <div id="chat-container">
-      <h1>Chatbot</h1>
+      <div id="chat-head">
+        <img src="maskot.png" alt="Maskot" id="chat-profile" />
+        <div id="head-right">
+          <h3>DigiGuide</h3>
+          <p>Assisten Desa</p>
+        </div>
+        <form id="upload-form">
+          <label for="pdf-upload" id="upload-label">
+            <img src="icon.png" style="width: 30px; height: auto;" alt="Icon Digides" />
+          </label>
+          <input
+            type="file"
+            id="pdf-upload"
+            accept=".pdf"
+            style="display: none"
+          />
+        </form>
+      </div>
       <div id="chat-history"></div>
       <form id="chat-form">
-        <input type="text" id="user-input" placeholder="Enter your message" />
-        <button type="submit">Send</button>
+        <input
+          type="text"
+          id="user-input"
+          placeholder="Tanyakan apa saja seputar DIGIDES..."
+        />
+        <button type="submit">Kirim</button>
       </form>
     </div>
     <div id="loader">
@@ -92,19 +195,22 @@
       const chatHistory = document.getElementById("chat-history");
       const userInput = document.getElementById("user-input");
       const form = document.getElementById("chat-form");
-
+      const uploadForm = document.getElementById("upload-form");
+      const pdfUpload = document.getElementById("pdf-upload");
 
       function formatMessage(text) {
-        return text
-          .replace(/\n/g, "<br>") 
+        text = text.replace(/\n\* (.*?)(?=\n|$)/g, "<li>$1</li>");
+        text = text.replace(/(<li>.*?<\/li>)+/g, "<ul>$&</ul>");
+        text = text
           .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
           .replace(/\*(.*?)\*/g, "<i>$1</i>");
+
+        return text;
       }
 
       async function sendMessage() {
         const userMessage = userInput.value;
         userInput.value = "";
-        console.log(userMessage);
         try {
           const response = await fetch("http://localhost:3000/chat", {
             method: "POST",
@@ -113,13 +219,22 @@
           });
 
           const data = await response.json();
-          console.log(data);
           const botMessage = data.response;
-          console.log(botMessage);
 
-          chatHistory.innerHTML += `<div class="user-message">${userMessage}</div>`;
-          chatHistory.innerHTML += `<div class="bot-message"></div>`;
-          const botMessageDiv = chatHistory.lastElementChild;
+          chatHistory.innerHTML += `
+            <div class="message-container user-message-container">
+              <div class="user-message">${userMessage}</div>
+              <img src="user.jpg" alt="User" />
+            </div>`;
+
+          chatHistory.innerHTML += `
+            <div class="message-container bot-message-container">
+              <img src="digides.png" alt="Bot" />
+              <div class="bot-message"></div>
+            </div>`;
+
+          const botMessageDiv =
+            chatHistory.lastElementChild.querySelector(".bot-message");
           botMessageDiv.innerHTML = formatMessage(botMessage);
 
           chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -135,6 +250,30 @@
         sendMessage().finally(() => {
           loader.style.display = "none";
         });
+      });
+
+      pdfUpload.addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+          alert("Please select a PDF file to upload.");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("pdf", file);
+
+        try {
+          const response = await fetch("http://localhost:3000/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+          alert(data.message);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+          alert("Failed to upload file.");
+        }
       });
     </script>
   </body>
